@@ -65,7 +65,7 @@ class CRAGProcessor:
         )
         grade = response.content[0].text.strip().upper()
 
-        for valid in ["CORRECT", "AMBIGUOUS", "INCORRECT"]:
+        for valid in ["INCORRECT", "AMBIGUOUS", "CORRECT"]:
             if valid in grade:
                 return valid
         return "INCORRECT"
