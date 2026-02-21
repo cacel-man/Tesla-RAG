@@ -44,6 +44,10 @@ RERANK_CANDIDATES: int = 15  # Rerankerに渡す候補数（top_k * 3）
 # --- V5: CRAG ---
 MAX_RETRY: int = 1  # クエリリライト→再検索の最大回数
 
+# --- V6: FastAPI ---
+API_HOST: str = "0.0.0.0"
+API_PORT: int = 8000
+
 # --- LLM設定 ---
 CLAUDE_MODEL: str = "claude-sonnet-4-20250514"
 ANTHROPIC_API_KEY: str = os.environ.get("ANTHROPIC_API_KEY", "")
