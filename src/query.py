@@ -12,11 +12,14 @@ from config import (
     CLAUDE_MODEL,
     COLLECTION_NAME,
     EMBEDDING_MODEL,
+    MAX_RETRY,
     SEARCH_MODE,
     SYSTEM_PROMPT,
     TOP_K,
 )
 from hybrid_search import HybridSearcher
+from reranker import Reranker
+from crag import CRAGProcessor
 
 
 def get_collection() -> chromadb.Collection:
@@ -155,31 +158,90 @@ def main() -> None:
     print(f"準備完了! ({count}チャンクをインデックス済み)")
     print(f"検索モード: {mode}\n")
 
-    # hybridモード時はHybridSearcherを初期化
+    # hybrid/rerank/cragモード時はHybridSearcherを初期化
     searcher = None
-    if mode == "hybrid":
+    reranker = None
+    crag_processor = None
+    if mode in ("hybrid", "rerank", "crag"):
         print("BM25インデックスを構築中...")
         searcher = HybridSearcher(collection)
+        if mode in ("rerank", "crag"):
+            print("Rerankerモデルをロード中...")
+            reranker = Reranker()
+        if mode == "crag":
+            print("CRAGプロセッサを初期化中...")
+            crag_processor = CRAGProcessor()
+
+    def _display_hybrid_chunks(hybrid_results: list[dict], label: str) -> None:
+        """ハイブリッド/rerank/crag検索結果のチャンクを表示する."""
+        print("\n" + "=" * 60)
+        print(f"検索で取得したチャンク ({label})")
+        print("=" * 60)
+        for i, result in enumerate(hybrid_results):
+            meta = result["metadata"]
+            print(f"\n--- チャンク {i+1}/{len(hybrid_results)} ---")
+            print(f"  source : {meta.get('source', 'unknown')}")
+            print(f"  page   : {meta.get('page', '?')}")
+            print(f"  quarter: {meta.get('quarter', '?')}")
+            print(f"  sources: {', '.join(result['sources'])}")
+            print(f"  score  : {result['score']:.4f}")
+            if "rerank_score" in result:
+                print(f"  rerank : {result['rerank_score']:.4f}")
+                print(f"  元順位  : {result['original_rank']}")
+            print(f"  テキスト: {result['content'][:200]}...")
+        print("\n" + "=" * 60)
 
     def process_query(query: str) -> None:
-        if mode == "hybrid" and searcher is not None:
-            hybrid_results = searcher.search(query, model, top_k=TOP_K)
-            context, references = build_context_from_hybrid(hybrid_results)
+        if mode == "crag" and searcher is not None and reranker is not None and crag_processor is not None:
+            current_query = query
+            retry_count = 0
+            crag_log = []
 
-            # チャンク表示
-            print("\n" + "=" * 60)
-            print("検索で取得したチャンク (hybrid)")
-            print("=" * 60)
-            for i, result in enumerate(hybrid_results):
-                meta = result["metadata"]
-                print(f"\n--- チャンク {i+1}/{len(hybrid_results)} ---")
-                print(f"  source : {meta.get('source', 'unknown')}")
-                print(f"  page   : {meta.get('page', '?')}")
-                print(f"  quarter: {meta.get('quarter', '?')}")
-                print(f"  sources: {', '.join(result['sources'])}")
-                print(f"  score  : {result['score']:.4f}")
-                print(f"  テキスト: {result['content'][:200]}...")
-            print("\n" + "=" * 60)
+            while True:
+                hybrid_results = searcher.search(
+                    current_query, model, top_k=TOP_K, reranker=reranker,
+                )
+                context, references = build_context_from_hybrid(hybrid_results)
+
+                grade = crag_processor.grade_results(query, context)
+                crag_log.append({
+                    "retry": retry_count,
+                    "query": current_query,
+                    "grade": grade,
+                })
+
+                print(f"\n🔍 CRAG判定 (retry={retry_count}): {grade}")
+                print(f"   検索クエリ: {current_query}")
+
+                if grade == "CORRECT" or retry_count >= MAX_RETRY:
+                    if retry_count >= MAX_RETRY and grade != "CORRECT":
+                        print(f"   ⚠️ MAX_RETRY({MAX_RETRY})到達。現在の検索結果で回答生成。")
+                    break
+
+                print(f"   → クエリリライト中...")
+                current_query = crag_processor.rewrite_query(query, current_query, context)
+                print(f"   → 新クエリ: {current_query}")
+                retry_count += 1
+
+            _display_hybrid_chunks(hybrid_results, "crag")
+
+            print(f"\n📊 CRAGログ:")
+            for log in crag_log:
+                print(f"   retry={log['retry']}: [{log['grade']}] {log['query']}")
+
+            print("\n回答を生成中...\n")
+            answer = ask_claude(query, context)
+            print(f"{answer}")
+            display_references(references)
+            print()
+            return
+
+        elif mode in ("hybrid", "rerank") and searcher is not None:
+            hybrid_results = searcher.search(
+                query, model, top_k=TOP_K, reranker=reranker,
+            )
+            context, references = build_context_from_hybrid(hybrid_results)
+            _display_hybrid_chunks(hybrid_results, mode)
         else:
             results = search(query, collection, model)
             context, references = build_context(results)

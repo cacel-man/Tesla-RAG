@@ -30,12 +30,19 @@ TOP_K: int = 5
 # --- V2: Hybrid Search ---
 BM25_TOP_K_MULTIPLIER: int = 2  # BM25/Vectorそれぞれtop_k * この値を取得
 RRF_K: int = 60                  # RRF定数
-SEARCH_MODE: str = "hybrid"      # "vector" or "hybrid"
+SEARCH_MODE: str = "crag"        # "vector" / "hybrid" / "rerank" / "crag"
 
 # --- V3: テーブル対応チャンキング ---
 TABLE_CHUNK_SIZE: int = 2500
 TABLE_CHUNK_OVERLAP: int = 500
 TABLE_BOOST_FACTOR: float = 1.2  # テーブルチャンクのRRFスコアブースト
+
+# --- V4: Reranker ---
+RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"  # 軽量で高性能
+RERANK_CANDIDATES: int = 15  # Rerankerに渡す候補数（top_k * 3）
+
+# --- V5: CRAG ---
+MAX_RETRY: int = 1  # クエリリライト→再検索の最大回数
 
 # --- LLM設定 ---
 CLAUDE_MODEL: str = "claude-sonnet-4-20250514"

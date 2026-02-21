@@ -5,7 +5,7 @@ from sentence_transformers import SentenceTransformer
 
 import chromadb
 
-from config import BM25_TOP_K_MULTIPLIER, RRF_K, TABLE_BOOST_FACTOR
+from config import BM25_TOP_K_MULTIPLIER, RERANK_CANDIDATES, RRF_K, TABLE_BOOST_FACTOR
 
 
 class HybridSearcher:
@@ -29,6 +29,7 @@ class HybridSearcher:
         query: str,
         model: SentenceTransformer,
         top_k: int = 5,
+        reranker=None,
     ) -> list[dict]:
         """ハイブリッド検索を実行し、RRFで統合した上位top_k件を返す."""
         fetch_k = top_k * BM25_TOP_K_MULTIPLIER
@@ -53,10 +54,10 @@ class HybridSearcher:
 
         # 3. RRF統合
         ranked_lists = [vector_ids, bm25_ids]
-        fused_ids = self._rrf_fusion(ranked_lists, top_k=top_k)
+        rrf_top_k = RERANK_CANDIDATES if reranker else top_k
+        fused_ids = self._rrf_fusion(ranked_lists, top_k=rrf_top_k)
 
         # 4. 結果を組み立て
-        # 各IDがどの検索で引っかかったかを記録
         vector_set = set(vector_ids)
         bm25_set = set(bm25_ids)
 
@@ -75,6 +76,10 @@ class HybridSearcher:
                 "score": score,
                 "sources": sources,
             })
+
+        # 5. Rerankerでフィルタリング
+        if reranker:
+            results = reranker.rerank(query, results, top_k=top_k)
 
         return results
 

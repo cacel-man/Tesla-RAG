@@ -14,7 +14,8 @@ def main() -> None:
     metadatas = all_data["metadatas"]
     ids = all_data["ids"]
 
-    keyword = "revenue"
+    import sys
+    keyword = sys.argv[1] if len(sys.argv) > 1 else "revenue"
     matches = []
 
     for i, (doc, meta) in enumerate(zip(documents, metadatas)):

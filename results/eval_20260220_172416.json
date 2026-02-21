@@ -1,0 +1,392 @@
+{
+  "timestamp": "2026-02-20T17:24:16.209729",
+  "results": [
+    {
+      "question": "What was Tesla's total revenues in 2025?",
+      "expected": "$94,827M",
+      "answer": "Based on the provided financial data, Tesla's total revenues in 2025 were **$94,827 million** (approximately $94.8 billion).\n\nThis represents a **3% decrease** compared to 2024, when total revenues were $97,690 million.\n\nThe breakdown of Tesla's 2025 revenues by segment was:\n- Automotive revenues: $69,526 million (down 10% from 2024)\n- Energy generation and storage revenue: $12,771 million (up 27% from 2024)\n- Services and other revenue: $12,530 million (up 19% from 2024)\n\nWhile automotive revenues declined, Tesla saw strong growth in both its energy and services segments, which helped partially offset the automotive revenue decrease.",
+      "exact_match": true,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 5
+      },
+      "references": [
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 5,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 23,
+          "quarter": "Q3"
+        }
+      ]
+    },
+    {
+      "question": "What was Tesla's operating margin in 2025?",
+      "expected": "4.6%",
+      "answer": "Based on the provided context, Tesla's operating margin in 2025 was **4.6%**.\n\nThis represents a significant decrease of 265 basis points compared to the previous year, when the operating margin was 7.2% in 2024. The context shows that Tesla's income from operations was $4,355 million (or $4.4 billion) in 2025, while total revenues were $94,827 million, resulting in this 4.6% operating margin.",
+      "exact_match": true,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 5
+      },
+      "references": [
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 6,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 7,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 5,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 11,
+          "quarter": "Q4"
+        }
+      ]
+    },
+    {
+      "question": "What was Tesla's GAAP net income in 2025?",
+      "expected": "$3,794M",
+      "answer": "Based on the provided context, Tesla's GAAP net income in 2025 was **$3.8 billion**.\n\nThis information is found in the Q4 2025 summary highlights, which states: \"$3.8B GAAP net income in 2025; $0.8B in Q4\"\n\nAdditionally, this is confirmed in the Financial Summary table, which shows \"Net income attributable to common stockholders (GAAP)\" for 2025 as $3,794 million (which equals $3.794 billion, rounded to $3.8B in the highlights).",
+      "exact_match": true,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 5
+      },
+      "references": [
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 28,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 34,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 5,
+          "quarter": "Q4"
+        }
+      ]
+    },
+    {
+      "question": "What was Tesla's Energy generation and storage revenue in Q4-2025?",
+      "expected": "$3,837M",
+      "answer": "Based on the provided financial data, Tesla's Energy generation and storage revenue in Q4-2025 was **$3,837 million** (or $3.837 billion).\n\nThis represents a 25% increase compared to Q4-2024, when the revenue was $3,061 million. The Q4-2025 figure also shows sequential growth from Q3-2025, when Energy generation and storage revenue was $3,415 million.\n\nAdditionally, the context notes that Q4-2025 achieved record quarterly energy storage deployments, driven by record Megapack deployments, with total gross profit for this segment reaching a record $1.1 billion.",
+      "exact_match": true,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 5
+      },
+      "references": [
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 28,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 8,
+          "quarter": "Q4"
+        }
+      ]
+    },
+    {
+      "question": "What was Tesla's total automotive revenues in Q4-2025?",
+      "expected": "$17,693M",
+      "answer": "Based on the provided financial data, Tesla's total automotive revenues in Q4-2025 was $17,693 million (or $17.693 billion).\n\nThis represents an 11% year-over-year decrease compared to Q4-2024, when total automotive revenues were $19,798 million.",
+      "exact_match": true,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 5
+      },
+      "references": [
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 23,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 28,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 5,
+          "quarter": "Q4"
+        }
+      ]
+    },
+    {
+      "question": "What was Tesla's free cash flow in Q3-2025?",
+      "expected": "$3,990M",
+      "answer": "提供されたコンテキストを確認しましたが、Tesla のQ3 2025における具体的なフリーキャッシュフロー数値は明記されていません。\n\n参照3のQ3 2025のサマリーには「record revenue and free cash flow generation in the quarter」と記載されており、Q3でフリーキャッシュフローが記録的な水準だったことは分かりますが、具体的な金額は提示されていません。\n\n参照5にはフリーキャッシュフローのグラフが含まれているようですが、このコンテキストからは具体的な数値を読み取ることができません。\n\n正確なQ3 2025のフリーキャッシュフロー数値を知るには、より詳細な財務データが必要です。",
+      "exact_match": false,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 3
+      },
+      "references": [
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 25,
+          "quarter": "Q4"
+        }
+      ]
+    },
+    {
+      "question": "What was Tesla's Adjusted EBITDA in 2025?",
+      "expected": "$14,596M",
+      "answer": "Based on the provided context, Tesla's Adjusted EBITDA in 2025 was **$14,596 million** (or $14.6 billion).\n\nThis information comes from the Financial Summary table in the Q4 2025 update document, which shows the annual figures for 2025. The Adjusted EBITDA margin for 2025 was 15.4%, representing a decrease of 104 basis points compared to the previous year.\n\nIt's worth noting that beginning in Q1 2025, Tesla's Adjusted EBITDA (non-GAAP) presentation was adjusted to be presented net of digital assets gains and losses, and all prior periods were adjusted accordingly for consistency.",
+      "exact_match": true,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 5
+      },
+      "references": [
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 20,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 28,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 24,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 25,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 5,
+          "quarter": "Q4"
+        }
+      ]
+    },
+    {
+      "question": "How did Tesla's total revenues change from Q3-2025 to Q4-2025?",
+      "expected": "$28,095M to $24,901M, decreased",
+      "answer": "Based on the provided financial data, Tesla's total revenues decreased from Q3-2025 to Q4-2025.\n\n**Quarterly Revenue Comparison:**\n- Q3-2025: $28,095 million\n- Q4-2025: $24,901 million\n\n**Change:** The total revenues declined by $3,194 million (or approximately 11.4%) from Q3 to Q4 2025.\n\nThis decline was primarily driven by a significant decrease in automotive revenues, which fell from $21,205 million in Q3 to $17,693 million in Q4 (a decrease of $3,512 million). However, this was partially offset by increases in other segments:\n\n- Energy generation and storage revenue increased from $3,415 million to $3,837 million (+$422 million)\n- Services and other revenue decreased slightly from $3,475 million to $3,371 million (-$104 million)\n\nThe year-over-year comparison shows that Q4-2025 total revenues were down 3% compared to Q4-2024 ($25,707 million).",
+      "exact_match": false,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 5
+      },
+      "references": [
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 23,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 28,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 3,
+          "quarter": "Q4"
+        }
+      ]
+    },
+    {
+      "question": "What was the YoY growth rate of Tesla's Energy generation and storage revenue in 2025?",
+      "expected": "27%",
+      "answer": "Based on the provided financial summary data, Tesla's Energy generation and storage revenue had a **27% year-over-year growth rate in 2025**.\n\nAccording to the annual financial summary (参照1), Energy generation and storage revenue was:\n- 2024: $10,086 million\n- 2025: $12,771 million\n- YoY growth: 27%\n\nThis represents strong growth in Tesla's energy business segment, which has been consistently expanding over the years shown in the data.",
+      "exact_match": true,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 5
+      },
+      "references": [
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 5,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 5,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 26,
+          "quarter": "Q4"
+        }
+      ]
+    },
+    {
+      "question": "What was Tesla's GAAP EPS diluted in Q4-2025?",
+      "expected": "$0.24",
+      "answer": "Based on the provided financial data, Tesla's GAAP EPS diluted in Q4-2025 was **$0.24**.\n\nThis represents a significant 60% decrease compared to Q4-2024, when the GAAP EPS diluted was $0.60.",
+      "exact_match": true,
+      "scores": {
+        "relevancy": 5,
+        "faithfulness": 5,
+        "completeness": 5
+      },
+      "references": [
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 4,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 31,
+          "quarter": "Q4"
+        },
+        {
+          "source": "TSLA-Q3-2025-Update.pdf",
+          "page": 26,
+          "quarter": "Q3"
+        },
+        {
+          "source": "TSLA-Q4-2025-Update.pdf",
+          "page": 5,
+          "quarter": "Q4"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "search_mode": "rerank",
+    "exact_match": "8/10",
+    "avg_relevancy": 5.0,
+    "avg_faithfulness": 5.0,
+    "avg_completeness": 4.8
+  }
+}

@@ -9,7 +9,7 @@ from datetime import datetime
 import anthropic
 from sentence_transformers import SentenceTransformer
 
-from config import ANTHROPIC_API_KEY, CLAUDE_MODEL, EMBEDDING_MODEL, SEARCH_MODE
+from config import ANTHROPIC_API_KEY, CLAUDE_MODEL, EMBEDDING_MODEL, MAX_RETRY, SEARCH_MODE
 from query import (
     get_collection,
     search,
@@ -18,6 +18,8 @@ from query import (
     ask_claude,
 )
 from hybrid_search import HybridSearcher
+from reranker import Reranker
+from crag import CRAGProcessor
 
 # --- 評価データ（10問） ---
 EVAL_DATA = [
@@ -61,17 +63,40 @@ def run_rag(
     model: SentenceTransformer,
     search_mode: str = "vector",
     searcher: HybridSearcher | None = None,
-) -> tuple[str, str, list[dict]]:
-    """RAGパイプラインを実行し、(回答, コンテキスト, 参照情報)を返す."""
-    if search_mode == "hybrid" and searcher is not None:
-        hybrid_results = searcher.search(query, model)
+    reranker: Reranker | None = None,
+    crag_processor: CRAGProcessor | None = None,
+) -> tuple[str, str, list[dict], dict]:
+    """RAGパイプラインを実行し、(回答, コンテキスト, 参照情報, CRAGメタ)を返す."""
+    crag_meta = {"retries": 0, "grades": []}
+
+    if search_mode == "crag" and searcher is not None and crag_processor is not None:
+        current_query = query
+        retry_count = 0
+
+        while True:
+            hybrid_results = searcher.search(current_query, model, reranker=reranker)
+            context, references = build_context_from_hybrid(hybrid_results)
+
+            grade = crag_processor.grade_results(query, context)
+            crag_meta["grades"].append(grade)
+
+            if grade == "CORRECT" or retry_count >= MAX_RETRY:
+                break
+
+            current_query = crag_processor.rewrite_query(query, current_query, context)
+            retry_count += 1
+
+        crag_meta["retries"] = retry_count
+
+    elif search_mode in ("hybrid", "rerank") and searcher is not None:
+        hybrid_results = searcher.search(query, model, reranker=reranker)
         context, references = build_context_from_hybrid(hybrid_results)
     else:
         results = search(query, collection, model)
         context, references = build_context(results)
 
     answer = ask_claude(query, context)
-    return answer, context, references
+    return answer, context, references, crag_meta
 
 
 def normalize_text(text: str) -> str:
@@ -198,11 +223,19 @@ def main() -> None:
     collection = get_collection()
     print(f"準備完了! ({collection.count()}チャンクをインデックス済み)")
 
-    # hybridモード時はHybridSearcherを初期化
+    # hybrid/rerank/cragモード時はHybridSearcherを初期化
     searcher = None
-    if search_mode == "hybrid":
+    reranker = None
+    crag_processor = None
+    if search_mode in ("hybrid", "rerank", "crag"):
         print("BM25インデックスを構築中...")
         searcher = HybridSearcher(collection)
+        if search_mode in ("rerank", "crag"):
+            print("Rerankerモデルをロード中...")
+            reranker = Reranker()
+        if search_mode == "crag":
+            print("CRAGプロセッサを初期化中...")
+            crag_processor = CRAGProcessor()
 
     print()
 
@@ -222,10 +255,12 @@ def main() -> None:
 
         # RAG実行
         print("  RAG実行中...")
-        answer, context, references = run_rag(
+        answer, context, references, crag_meta = run_rag(
             query, collection, model,
             search_mode=search_mode,
             searcher=searcher,
+            reranker=reranker,
+            crag_processor=crag_processor,
         )
 
         # 正解一致チェック
@@ -250,16 +285,22 @@ def main() -> None:
             f"Faithfulness={scores['faithfulness']} "
             f"Completeness={scores['completeness']}"
         )
+        if search_mode == "crag":
+            print(f"  CRAG: retries={crag_meta['retries']}, grades={crag_meta['grades']}")
         print()
 
-        results.append({
+        result_item = {
             "question": query,
             "expected": expected,
             "answer": answer,
             "exact_match": match,
             "scores": scores,
             "references": references,
-        })
+        }
+        if search_mode == "crag":
+            result_item["crag_retries"] = crag_meta["retries"]
+            result_item["crag_grades"] = crag_meta["grades"]
+        results.append(result_item)
 
     # サマリー
     n = len(EVAL_DATA)
@@ -270,6 +311,10 @@ def main() -> None:
         "avg_faithfulness": round(total_faithfulness / n, 1),
         "avg_completeness": round(total_completeness / n, 1),
     }
+    if search_mode == "crag":
+        total_retries = sum(r.get("crag_retries", 0) for r in results)
+        summary["max_retry_setting"] = MAX_RETRY
+        summary["avg_retries"] = round(total_retries / n, 1)
 
     print("=" * 60)
     print("サマリー")
@@ -282,13 +327,27 @@ def main() -> None:
         f"Completeness {summary['avg_completeness']}"
     )
 
-    # V1結果との比較（hybridモード時）
+    # 過去バージョンとの比較
     if search_mode == "hybrid":
         print("\n  --- V1ベースラインとの比較 ---")
         print(f"  正答率:      V1=1/10  → V2={summary['exact_match']}")
         print(f"  Relevancy:   V1=4.7   → V2={summary['avg_relevancy']}")
         print(f"  Faithfulness:V1=5.0   → V2={summary['avg_faithfulness']}")
         print(f"  Completeness:V1=3.3   → V2={summary['avg_completeness']}")
+    elif search_mode == "rerank":
+        print("\n  --- V3(hybrid)との比較 ---")
+        print(f"  正答率:      V3=6/10  → V4={summary['exact_match']}")
+        print(f"  Relevancy:   V3=5.0   → V4={summary['avg_relevancy']}")
+        print(f"  Faithfulness:V3=5.0   → V4={summary['avg_faithfulness']}")
+        print(f"  Completeness:V3=4.5   → V4={summary['avg_completeness']}")
+    elif search_mode == "crag":
+        print(f"\n  MAX_RETRY設定: {MAX_RETRY}")
+        print(f"  平均リトライ回数: {summary['avg_retries']}")
+        print("\n  --- V4(rerank)との比較 ---")
+        print(f"  正答率:      V4=6/10  → V5={summary['exact_match']}")
+        print(f"  Relevancy:   V4=5.0   → V5={summary['avg_relevancy']}")
+        print(f"  Faithfulness:V4=5.0   → V5={summary['avg_faithfulness']}")
+        print(f"  Completeness:V4=4.5   → V5={summary['avg_completeness']}")
 
     # 結果保存
     filepath = save_results(results, summary)
